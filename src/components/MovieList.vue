@@ -1,25 +1,26 @@
 <template>
   <div id="movie-list">
-    <div v-for="movie in filteredMovies" class="movie">{{movie.title}}</div>
+    <movie-item v-for="movie in filteredMovies" v-bind:movie="movie.movie"></movie-item>
   </div>
 </template>
 <script>
   import genres from '../util/genres';
+  import MovieItem from './MovieItem.vue';
   
   export default {
-      data: function() {
-        return {
-          movies: [
-            {title: 'Kill Bill', genre: genres.CRIME},
-            {title: 'Home Alone', genre: genres.COMEDY},
-            {title: 'Austin Powers', genre: genres.COMEDY}
-          ]
-        }
-      },
       methods: {
         moviePassesGenreFilter(movie) {
-          var doesMovieBelong = this.genre.includes(movie.genre);
-          return this.genre.length > 0 ? doesMovieBelong : true;
+          if (this.genre.length === 0) {return true;}
+          var movieGenres = movie.movie.Genre.split(", ");
+          var matched = true;
+          this.genre.forEach(genre => {
+            if (movieGenres.indexOf(genre) === -1) {
+              matched = false;
+            }
+          });
+          return matched;
+
+          //return this.genre.filter(e => movieGenres.includes(e)).length > 0;//this.genre.includes(movieGenres);
         }
       },
       computed: {
@@ -27,7 +28,10 @@
           return this.movies.filter(movie => this.moviePassesGenreFilter(movie))
         }
       },
-      props: ['genre', 'time']
+      props: ['genre', 'time', 'movies'],
+      components: {
+        MovieItem
+      }
     } 
 </script>
 <style>
