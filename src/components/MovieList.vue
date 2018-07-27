@@ -1,6 +1,14 @@
 <template>
   <div id="movie-list">
-    <movie-item v-for="movie in filteredMovies" v-bind:movie="movie.movie"></movie-item>
+    <div v-if="filteredMovies.length" class="no-results">
+      <movie-item v-for="movie in filteredMovies" v-bind:movie="movie.movie"></movie-item>
+    </div>
+    <div v-else-if="movies.length" class="no-results">
+      No results for {{selectedGenres}}.
+    </div>
+    <div v-else>
+      <p>Loading...</p>
+    </div>
   </div>
 </template>
 <script>
@@ -26,11 +34,24 @@
       computed: {
         filteredMovies() {
           return this.movies.filter(movie => this.moviePassesGenreFilter(movie))
+        },
+        selectedGenres() {
+          var results = "";
+          this.genre.forEach(genre => {
+            results += genre;
+            if (this.genre.length - 1 != this.genre.indexOf(genre)) {
+              results += ", ";
+            }
+          });
+          return results;
         }
       },
       props: ['genre', 'time', 'movies'],
       components: {
         MovieItem
+      },
+      created() {
+        console.log(this.$moment);
       }
     } 
 </script>
