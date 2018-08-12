@@ -17,16 +17,17 @@ new Vue({
     genre: [],
     time: [],
     movies: [],
-    moment
+    moment,
+    day: moment()
   },
   methods: {
-    checkFilter(categorty, title, checked) {
+    checkFilter(category, title, checked) {
       if (checked) {
-        this[categorty].push(title);  
+        this[category].push(title);  
       } else {
-        var index = this[categorty].indexOf(title);
+        var index = this[category].indexOf(title);
         if (index > -1) {
-          this[categorty].splice(index, 1);
+          this[category].splice(index, 1);
         } 
       }
     }
